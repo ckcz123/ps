@@ -103,7 +103,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
-            this.button1.Text = "加载图片";
+            this.button1.Text = "打开图片";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -133,7 +133,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 5;
-            this.button4.Text = "加载图片";
+            this.button4.Text = "打开图片";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -207,9 +207,9 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(243, 403);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(197, 12);
+            this.label5.Size = new System.Drawing.Size(293, 12);
             this.label5.TabIndex = 13;
-            this.label5.Text = "Ctrl+Z可回退到上一步粘贴操作前。";
+            this.label5.Text = "Ctrl+Z可回退到上一步粘贴操作前（只能回退一步）。";
             // 
             // label6
             // 

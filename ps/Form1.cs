@@ -19,11 +19,10 @@ namespace ps
             InitializeComponent();
         }
 
-        private Bitmap bitmap1, bitmap2, lbitmap1, lbitmap2;
+        private Bitmap bitmap1, bitmap2, lbitmap1, lbitmap2, copyBitmap;
         private Bitmap picture1, picture2;
         private Graphics graphics1, graphics2;
         string directory1 = null, filename1 = null, directory2 = null, filename2 = null;
-        private string lastaction = null;
         private int lx=-1, ly=-1, rx=-1, ry=-1;
 
         private bool loadImage(ref string directory, ref string filename, ref Bitmap bitmap)
@@ -51,7 +50,11 @@ namespace ps
                         MessageBox.Show("目标图片的宽或高不是32的倍数！", "加载失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
-                    bitmap = _bitmap;
+                    // bitmap = _bitmap;
+                    bitmap = new Bitmap(_bitmap.Width, _bitmap.Height);
+                    Graphics graphics = Graphics.FromImage(bitmap);
+                    graphics.DrawImage(_bitmap, new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), 0, 0, _bitmap.Width, _bitmap.Height, GraphicsUnit.Pixel);
+                    graphics.Dispose();
                     directory = Path.GetDirectoryName(dialog.FileName);
                     filename = Path.GetFileName(dialog.FileName);
                     return true;
@@ -73,10 +76,10 @@ namespace ps
         {
             if (loadImage(ref directory1, ref filename1, ref bitmap1))
             {
-                lbitmap1 = cloneBitmap(bitmap1);
+                lbitmap1 = null;
                 picture1 = cloneBitmap(bitmap1);
                 graphics1 = Graphics.FromImage(picture1);
-                lx = ly = rx = ry = -1;
+                lx = ly = -1;
                 pictureBox1.Image = picture1;
             }
         }
@@ -85,10 +88,10 @@ namespace ps
         {
             if (loadImage(ref directory2, ref filename2, ref bitmap2))
             {
-                lbitmap2 = cloneBitmap(bitmap2);
+                lbitmap2 = null;
                 picture2 = cloneBitmap(bitmap2);
                 graphics2 = Graphics.FromImage(picture2);
-                lx = ly = rx = ry = -1;
+                rx = ry = -1;
                 pictureBox2.Image = picture2;
             }
         }
@@ -135,13 +138,12 @@ namespace ps
                 return;
             }
             lbitmap1 = cloneBitmap(bitmap1);
-            Bitmap nBitmap = new Bitmap(bitmap1.Width, bitmap1.Height + 32);
+            Bitmap nBitmap = new Bitmap(bitmap1.Width, bitmap1.Height + 32, bitmap1.PixelFormat);
             Graphics graphics = Graphics.FromImage(nBitmap);
             graphics.DrawImage(bitmap1, 0, 0);
             graphics.Dispose();
-            bitmap1 = nBitmap;
+            bitmap1 = cloneBitmap(nBitmap);
             drawBorder();
-            lastaction = "add1";
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -158,7 +160,6 @@ namespace ps
             graphics.Dispose();
             bitmap2 = nBitmap;
             drawBorder();
-            lastaction = "add2";
         }
 
         private bool saveImage(ref string directory, ref string filename, Bitmap bitmap)
@@ -197,8 +198,7 @@ namespace ps
         {
             if (saveImage(ref directory1, ref filename1, bitmap1))
             {
-                lbitmap1 = cloneBitmap(bitmap1);
-                lastaction = null;
+                lbitmap1 = null;
             }
         }
 
@@ -206,8 +206,7 @@ namespace ps
         {
             if (saveImage(ref directory2, ref filename2, bitmap2))
             {
-                lbitmap2 = cloneBitmap(bitmap2);
-                lastaction = null;
+                lbitmap2 = null;
             }
         }
 
@@ -236,11 +235,43 @@ namespace ps
                 // 复制
                 if (lx >= 0 && ly >= 0)
                 {
-                    
+                    copyBitmap = bitmap1.Clone(new Rectangle(32 * lx, 32 * ly, 32, 32), bitmap1.PixelFormat);
+                    pictureBox3.Image = copyBitmap;
+                }
+                if (rx >= 0 && ry >= 0)
+                {
+                    copyBitmap = bitmap2.Clone(new Rectangle(32 * rx, 32 * ry, 32, 32), bitmap2.PixelFormat);
+                    pictureBox3.Image = copyBitmap;
                 }
             }
+            if (e.KeyCode == Keys.V && e.Control && copyBitmap!=null)
+            {
+                // 替换
+                if (lx >= 0 && ly >= 0)
+                {
+                    lbitmap1 = cloneBitmap(bitmap1);
+                    Graphics graphics=Graphics.FromImage(bitmap1);
+                    graphics.Clip = new Region(new Rectangle(32*lx, 32*ly, 32, 32));
+                    graphics.Clear(Color.Transparent);
+                    graphics.DrawImage(copyBitmap, 32 * lx, 32 * ly);
+                    graphics.Dispose();
+                    drawBorder();
+                }
+            }
+            if (e.KeyCode == Keys.Z && e.Control)
+            {
+                if (lbitmap1 != null)
+                {
+                    bitmap1 = lbitmap1;
+                    lbitmap1 = null;
+                }
+                if (lbitmap2 != null)
+                {
+                    bitmap2 = lbitmap2;
+                    lbitmap2 = null;
+                }
+                drawBorder();
+            }
         }
-
-
     }
 }
