@@ -257,6 +257,16 @@ namespace ps
                     graphics.Dispose();
                     drawBorder();
                 }
+                if (rx >= 0 && ry >= 0)
+                {
+                    lbitmap2 = cloneBitmap(bitmap2);
+                    Graphics graphics = Graphics.FromImage(bitmap2);
+                    graphics.Clip = new Region(new Rectangle(32 * rx, 32 * ry, 32, 32));
+                    graphics.Clear(Color.Transparent);
+                    graphics.DrawImage(copyBitmap, 32 * rx, 32 * ry);
+                    graphics.Dispose();
+                    drawBorder();
+                }
             }
             if (e.KeyCode == Keys.Z && e.Control)
             {
