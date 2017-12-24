@@ -35,8 +35,8 @@ namespace ps
             }
             else
             {
-                dialog.InitialDirectory = directory1;
-                dialog.FileName = filename1;
+                dialog.InitialDirectory = directory;
+                dialog.FileName = filename;
             }
             dialog.AddExtension = true;
             dialog.DefaultExt = ".png";
