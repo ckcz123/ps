@@ -48,6 +48,7 @@ namespace ps
                     if (_bitmap.Width % 32 != 0 || _bitmap.Height % 32 != 0)
                     {
                         MessageBox.Show("目标图片的宽或高不是32的倍数！", "加载失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        _bitmap.Dispose();
                         return false;
                     }
                     // bitmap = _bitmap;
@@ -55,6 +56,7 @@ namespace ps
                     Graphics graphics = Graphics.FromImage(bitmap);
                     graphics.DrawImage(_bitmap, new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), 0, 0, _bitmap.Width, _bitmap.Height, GraphicsUnit.Pixel);
                     graphics.Dispose();
+                    _bitmap.Dispose();
                     directory = Path.GetDirectoryName(dialog.FileName);
                     filename = Path.GetFileName(dialog.FileName);
                     return true;
