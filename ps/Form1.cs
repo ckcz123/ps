@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Threading;
 
 namespace ps
 {
@@ -265,80 +264,24 @@ namespace ps
 
         private Bitmap calBitmap(Bitmap map, int value)
         {
+
+            int hue = (int) (value * 360f / trackBar1.Maximum);
+
             Bitmap map2 = new Bitmap(map.Width, map.Height, map.PixelFormat);
+
+            BitmapWrapper mapWrapper = new BitmapWrapper(map);
+            BitmapWrapper map2Wrapper = new BitmapWrapper(map2);
 
             for (int i = 0; i < map.Width; i++)
             {
                 for (int j = 0; j < map.Height; j++)
                 {
-                    Color color = map.GetPixel(i, j);
-                    int a = color.A;
-                    float h = color.GetHue();
-                    float s = color.GetSaturation();
-                    float b = color.GetBrightness();
-
-                    h += value * 360f / trackBar1.Maximum;
-                    if (h >= 360) h -= 360;
-
-                    float fMax, fMid, fMin;
-                    int iSextant, iMax, iMid, iMin;
-
-                    if (0.5 < b)
-                    {
-                        fMax = b - (b * s) + s;
-                        fMin = b + (b * s) - s;
-                    }
-                    else
-                    {
-                        fMax = b + (b * s);
-                        fMin = b - (b * s);
-                    }
-
-                    iSextant = (int)Math.Floor(h / 60f);
-                    if (300f <= h)
-                    {
-                        h -= 360f;
-                    }
-                    h /= 60f;
-                    h -= 2f * (float)Math.Floor(((iSextant + 1f) % 6f) / 2f);
-                    if (0 == iSextant % 2)
-                    {
-                        fMid = h * (fMax - fMin) + fMin;
-                    }
-                    else
-                    {
-                        fMid = fMin - h * (fMax - fMin);
-                    }
-
-                    iMax = Convert.ToInt32(fMax * 255);
-                    iMid = Convert.ToInt32(fMid * 255);
-                    iMin = Convert.ToInt32(fMin * 255);
-
-                    Color nColor;
-                    switch (iSextant)
-                    {
-                        case 1:
-                            nColor = Color.FromArgb(a, iMid, iMax, iMin);
-                            break;
-                        case 2:
-                            nColor = Color.FromArgb(a, iMin, iMax, iMid);
-                            break;
-                        case 3:
-                            nColor = Color.FromArgb(a, iMin, iMid, iMax);
-                            break;
-                        case 4:
-                            nColor = Color.FromArgb(a, iMid, iMin, iMax);
-                            break;
-                        case 5:
-                            nColor = Color.FromArgb(a, iMax, iMin, iMid);
-                            break;
-                        default:
-                            nColor = Color.FromArgb(a, iMax, iMid, iMin);
-                            break;
-                    }
-                    map2.SetPixel(i, j, nColor);
+                    map2Wrapper.SetPixel(new Point(i,j), Util.addHue(mapWrapper.GetPixel(new Point(i,j)), hue));
                 }
             }
+
+            mapWrapper.UnWrapper();
+            map2Wrapper.UnWrapper();
             return map2;
         }
 
