@@ -43,9 +43,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -192,15 +192,6 @@
             this.label5.TabIndex = 13;
             this.label5.Text = "Ctrl+Z可回退到上一步粘贴操作前（只能回退一步）。";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(243, 401);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(239, 12);
-            this.label6.TabIndex = 14;
-            this.label6.Text = "本工具只支持32x32像素的操作，敬请谅解。";
-            // 
             // trackBar1
             // 
             this.trackBar1.Enabled = false;
@@ -221,6 +212,15 @@
             this.label7.Size = new System.Drawing.Size(29, 12);
             this.label7.TabIndex = 17;
             this.label7.Text = "色相";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(243, 401);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(239, 12);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "本工具只支持32x32像素的操作，敬请谅解。";
             // 
             // Form1
             // 
@@ -247,6 +247,8 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "便捷PS工具 By 艾之葵";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -277,9 +279,9 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
     }
 }
 
