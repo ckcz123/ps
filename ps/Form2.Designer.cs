@@ -70,7 +70,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "请选择像素";
+            this.Text = "请选择像素单位";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.ResumeLayout(false);
 
