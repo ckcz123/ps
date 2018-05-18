@@ -59,7 +59,7 @@ namespace ps
                     int trans = 0, white = 0;
                     for (int i = 0; i < _bitmap.Width; i++)
                     {
-                        for (int j = 0; j < _bitmap.Width; j++)
+                        for (int j = 0; j < _bitmap.Height; j++)
                         {
                             Color color = bitmapWrapper.GetPixel(i, j);
                             if (color.A==0) trans++;
@@ -74,7 +74,7 @@ namespace ps
                         {
                             for (int i = 0; i < _bitmap.Width; i++)
                             {
-                                for (int j = 0; j < _bitmap.Width; j++)
+                                for (int j = 0; j < _bitmap.Height; j++)
                                 {
                                     Color color = bitmapWrapper.GetPixel(i, j);
                                     if (color.A == 255 && color.R == 255 && color.G == 255 && color.B == 255)
