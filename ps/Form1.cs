@@ -50,7 +50,40 @@ namespace ps
             {
                 try
                 {
-                    Bitmap _bitmap = (Bitmap)Image.FromFile(dialog.FileName);
+                    Bitmap _bitmap_ = (Bitmap)Image.FromFile(dialog.FileName);
+                    Bitmap _bitmap = cloneBitmap(_bitmap_);
+                    _bitmap_.Dispose();
+
+                    // 检查白底
+                    BitmapWrapper bitmapWrapper = new BitmapWrapper(_bitmap);
+                    int trans = 0, white = 0;
+                    for (int i = 0; i < _bitmap.Width; i++)
+                    {
+                        for (int j = 0; j < _bitmap.Width; j++)
+                        {
+                            Color color = bitmapWrapper.GetPixel(i, j);
+                            if (color.A==0) trans++;
+                            if (color.A==255 && color.R==255 && color.G==255 && color.B==255) white++;
+                        }
+                    }
+
+                    if (white > trans * 10)
+                    {
+                        if (MessageBox.Show("看起来这张图片是以白色为底色，是否自动调整为透明底色？", "提示", MessageBoxButtons.OKCancel,
+                                MessageBoxIcon.Information) == DialogResult.OK)
+                        {
+                            for (int i = 0; i < _bitmap.Width; i++)
+                            {
+                                for (int j = 0; j < _bitmap.Width; j++)
+                                {
+                                    Color color = bitmapWrapper.GetPixel(i, j);
+                                    if (color.A == 255 && color.R == 255 && color.G == 255 && color.B == 255)
+                                        bitmapWrapper.SetPixel(i, j, Color.Transparent);
+                                }
+                            }
+                        }
+                    }
+                    bitmapWrapper.UnWrapper();
 
                     if (_bitmap.Width % 32 != 0 || _bitmap.Height % height != 0)
                     {

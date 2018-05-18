@@ -34,7 +34,12 @@ namespace ps
         }
         public void SetPixel(Point point, Color color)
         {
-            int offset = point.X * byteCount + point.Y * bmpData.Stride;
+            SetPixel(point.X, point.Y, color);
+        }
+
+        public void SetPixel(int x, int y, Color color)
+        {
+            int offset = x * byteCount + y * bmpData.Stride;
             scan0[offset] = color.B;
             scan0[offset + 1] = color.G;
             scan0[offset + 2] = color.R;
@@ -43,7 +48,12 @@ namespace ps
         }
         public Color GetPixel(Point point)
         {
-            int offset = point.X * byteCount + point.Y * bmpData.Stride;
+            return GetPixel(point.X, point.Y);
+        }
+
+        public Color GetPixel(int x, int y)
+        {
+            int offset = x * byteCount + y * bmpData.Stride;
             Color color = Color.FromArgb(
                 scan0[offset + 2],
                 scan0[offset + 1],
