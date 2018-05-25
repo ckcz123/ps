@@ -229,7 +229,9 @@ namespace ps
             graphics.DrawImage(bitmap1, 0, 0);
             graphics.Dispose();
             bitmap1 = cloneBitmap(nBitmap);
+            nBitmap.Dispose();
             drawBorder();
+            panel1.AutoScrollPosition = new Point(0, bitmap1.Height);
         }
 
         private bool saveImage(ref string directory, ref string filename, Bitmap bitmap)
@@ -373,6 +375,87 @@ namespace ps
         {
             pictureBox3.Height = height;
             label6.Text = "本工具只支持" + height + "x32像素的操作，敬请谅解。";
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (picture1 == null || picture2 == null)
+            {
+                MessageBox.Show("没有图片！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (bitmap1.Width != 64 && bitmap1.Width != 128)
+            {
+                MessageBox.Show("要导入的目标只能是怪物或NPC！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (nBitmap2.Width != 128 || nBitmap2.Height != 4 * height)
+            {
+                MessageBox.Show("只有4x4的图片才能进行批量导入！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            lbitmap1 = cloneBitmap(bitmap1);
+            Bitmap nBitmap = new Bitmap(bitmap1.Width, bitmap1.Height + 4 * height, bitmap1.PixelFormat);
+            Graphics graphics = Graphics.FromImage(nBitmap);
+            graphics.DrawImage(bitmap1, 0, 0);
+
+            if (bitmap1.Width == 128)
+            {
+                graphics.DrawImage(nBitmap2, 0, bitmap1.Height);
+            }
+            else
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    Bitmap first = nBitmap2.Clone(new Rectangle(0, i * height, 32, height), nBitmap2.PixelFormat);
+                    graphics.DrawImage(first, 0, bitmap1.Height + i*height);
+
+                    BitmapWrapper firstWrapper = new BitmapWrapper(first);
+
+                    Bitmap second = nBitmap2.Clone(new Rectangle(32, i * height, 32, height), nBitmap2.PixelFormat);
+                    BitmapWrapper secondWrapper = new BitmapWrapper(second);
+
+                    bool same = true;
+                    for (var x = 0; x < 32; x++)
+                    {
+                        for (var y = 0; y < height; y++)
+                        {
+                            if (firstWrapper.GetPixel(x, y).ToArgb() != secondWrapper.GetPixel(x, y).ToArgb())
+                            {
+                                same = false;
+                            }
+                        }
+                    }
+                    firstWrapper.UnWrapper();
+                    secondWrapper.UnWrapper();
+
+                    if (same)
+                    {
+                        // 1-3
+                        graphics.DrawImage(nBitmap2, new Rectangle(32, bitmap1.Height + i*height, 32, 32),
+                            new Rectangle(64, i * height, 32, height), GraphicsUnit.Pixel);
+                    }
+                    else
+                    {
+                        graphics.DrawImage(second, 32, bitmap1.Height + i * height);
+                    }
+
+                    first.Dispose();
+                    second.Dispose();
+                }
+            }
+
+            graphics.Dispose();
+            bitmap1 = cloneBitmap(nBitmap);
+            nBitmap.Dispose();
+            drawBorder();
+
+            panel1.AutoScrollPosition = new Point(0, bitmap1.Height);
+            MessageBox.Show("批量导入成功！", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
         }
     }
 }

@@ -46,6 +46,7 @@
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.button5 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -222,11 +223,22 @@
             this.label6.TabIndex = 14;
             this.label6.Text = "本工具只支持32x32像素的操作，敬请谅解。";
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(445, 155);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 18;
+            this.button5.Text = "批量导入";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(807, 506);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.label6);
@@ -282,6 +294,7 @@
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button button5;
     }
 }
 
