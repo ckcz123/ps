@@ -31,13 +31,24 @@ namespace ps
         private int lx=-1, ly=-1, rx=-1, ry=-1;
         private Bitmap[] cacheBitmap = new Bitmap[13];
 
+        private string getDirectory()
+        {
+            string curr = Directory.GetCurrentDirectory();
+            foreach (var s in new [] {"project\\images\\", "..\\project\\images\\", "images\\"})
+            {
+                string temp = Path.GetFullPath(Path.Combine(curr, s));
+                if (Directory.Exists(temp)) return temp;
+            }
+            return curr;
+        }
+
         private bool loadImage(ref string directory, ref string filename, ref Bitmap bitmap)
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "PNG图片(*.png)|*.png";
             if (string.IsNullOrEmpty(directory) || string.IsNullOrEmpty(directory))
             {
-                dialog.InitialDirectory = Directory.GetCurrentDirectory();
+                dialog.InitialDirectory = getDirectory();
             }
             else
             {
@@ -54,9 +65,9 @@ namespace ps
                     Bitmap _bitmap = cloneBitmap(_bitmap_);
                     _bitmap_.Dispose();
 
-                    // 检查白底
+                    // 检查纯白和纯黑底色
                     BitmapWrapper bitmapWrapper = new BitmapWrapper(_bitmap);
-                    int trans = 0, white = 0;
+                    int trans = 0, white = 0, black = 0;
                     for (int i = 0; i < _bitmap.Width; i++)
                     {
                         for (int j = 0; j < _bitmap.Height; j++)
@@ -64,12 +75,13 @@ namespace ps
                             Color color = bitmapWrapper.GetPixel(i, j);
                             if (color.A==0) trans++;
                             if (color.A==255 && color.R==255 && color.G==255 && color.B==255) white++;
+                            if (color.A == 255 && color.R == 0 && color.G == 0 && color.B == 0) black++;
                         }
                     }
 
-                    if (white > trans * 10)
+                    if (white > black && white > trans * 10)
                     {
-                        if (MessageBox.Show("看起来这张图片是以白色为底色，是否自动调整为透明底色？", "提示", MessageBoxButtons.OKCancel,
+                        if (MessageBox.Show("看起来这张图片是以纯白为底色，是否自动调整为透明底色？", "提示", MessageBoxButtons.OKCancel,
                                 MessageBoxIcon.Information) == DialogResult.OK)
                         {
                             for (int i = 0; i < _bitmap.Width; i++)
@@ -78,6 +90,22 @@ namespace ps
                                 {
                                     Color color = bitmapWrapper.GetPixel(i, j);
                                     if (color.A == 255 && color.R == 255 && color.G == 255 && color.B == 255)
+                                        bitmapWrapper.SetPixel(i, j, Color.Transparent);
+                                }
+                            }
+                        }
+                    }
+                    if (black > white && black > trans * 10)
+                    {
+                        if (MessageBox.Show("看起来这张图片是以纯黑为底色，是否自动调整为透明底色？", "提示", MessageBoxButtons.OKCancel,
+                                MessageBoxIcon.Information) == DialogResult.OK)
+                        {
+                            for (int i = 0; i < _bitmap.Width; i++)
+                            {
+                                for (int j = 0; j < _bitmap.Height; j++)
+                                {
+                                    Color color = bitmapWrapper.GetPixel(i, j);
+                                    if (color.A == 255 && color.R == 0 && color.G == 0 && color.B == 0)
                                         bitmapWrapper.SetPixel(i, j, Color.Transparent);
                                 }
                             }
