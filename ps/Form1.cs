@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -29,7 +30,7 @@ namespace ps
         private Graphics graphics1, graphics2;
         string directory1, filename1, directory2, filename2;
         private int lx=-1, ly=-1, rx=-1, ry=-1;
-        private Bitmap[] cacheBitmap = new Bitmap[13];
+        private Bitmap[] cacheBitmap = new Bitmap[25];
 
         private string getDirectory()
         {
@@ -173,6 +174,23 @@ namespace ps
             return bitmap.Clone(new Rectangle(0, 0, bitmap.Width, bitmap.Height), bitmap.PixelFormat);
         }
 
+        private Bitmap setOpacity(Bitmap bitmap)
+        {
+            Bitmap v = new Bitmap(bitmap.Width, bitmap.Height);
+            int value = (int)numericUpDown1.Value;
+            if (value < 0) value = 0;
+            if (value > 255) value = 255;
+            float opacity = value/255f;
+            Graphics graphics = Graphics.FromImage(v);
+            ColorMatrix matrix = new ColorMatrix();
+            matrix.Matrix33 = opacity;
+            ImageAttributes attributes = new ImageAttributes();
+            attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            graphics.DrawImage(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height), 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel, attributes);
+            graphics.Dispose();
+            return v;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             if (loadImage(ref directory1, ref filename1, ref bitmap1))
@@ -189,13 +207,19 @@ namespace ps
         {
             if (loadImage(ref directory2, ref filename2, ref bitmap2))
             {
-                for (int i = 0; i < 13; i++)
+                for (int i = 0; i < 25; i++)
                 {
                     if (cacheBitmap[i] != null)
                         cacheBitmap[i].Dispose();
                     cacheBitmap[i] = null;
                 }
-                nBitmap2 = cloneBitmap(bitmap2);
+                if (nBitmap2 != null)
+                {
+                    nBitmap2.Dispose();
+                    nBitmap2 = null;
+                }
+                numericUpDown1.Value = 255;
+                nBitmap2 = setOpacity(bitmap2);
                 picture2 = cloneBitmap(bitmap2);
                 graphics2 = Graphics.FromImage(picture2);
                 rx = ry = -1;
@@ -204,7 +228,7 @@ namespace ps
                 trackBar1.Enabled = true;
                 new Thread(() =>
                 {
-                    for (int i = 0; i < 13; i++)
+                    for (int i = 0; i < 25; i++)
                         cacheBitmap[i] = calBitmap(bitmap2, i);
                 }).Start();
             }
@@ -384,13 +408,19 @@ namespace ps
             return map2;
         }
 
-        private void trackBar1_Scroll(object sender, EventArgs e)
+        private void redrawImage(object sender, EventArgs e)
         {
+            if (bitmap2 == null) return;
             if (cacheBitmap[trackBar1.Value] != null)
             {
-                nBitmap2 = cacheBitmap[trackBar1.Value];
+                nBitmap2 = setOpacity(cacheBitmap[trackBar1.Value]);
             }
-            else nBitmap2 = calBitmap(bitmap2, trackBar1.Value);
+            else
+            {
+                Bitmap tmp = calBitmap(bitmap2, trackBar1.Value);
+                nBitmap2 = setOpacity(tmp);
+                tmp.Dispose();
+            }
             drawBorder();
         }
 
