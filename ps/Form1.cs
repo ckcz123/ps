@@ -153,7 +153,7 @@ namespace ps
                     {
                         bitmap = new Bitmap(_bitmap.Width, _bitmap.Height);
                         Graphics graphics = Graphics.FromImage(bitmap);
-                        graphics.DrawImage(_bitmap, new Rectangle(0, 0, _bitmap.Width, _bitmap.Height), 0, 0, _bitmap.Width, _bitmap.Height, GraphicsUnit.Pixel);
+                        Util.drawImage(graphics, _bitmap);
                         graphics.Dispose();
                         _bitmap.Dispose();
                     }
@@ -278,7 +278,7 @@ namespace ps
             lbitmap1 = cloneBitmap(bitmap1);
             Bitmap nBitmap = new Bitmap(bitmap1.Width, bitmap1.Height + height, bitmap1.PixelFormat);
             Graphics graphics = Graphics.FromImage(nBitmap);
-            graphics.DrawImage(bitmap1, 0, 0);
+            Util.drawImage(graphics, bitmap1);
             graphics.Dispose();
             bitmap1 = cloneBitmap(nBitmap);
             nBitmap.Dispose();
@@ -369,7 +369,7 @@ namespace ps
                     Graphics graphics=Graphics.FromImage(bitmap1);
                     graphics.Clip = new Region(new Rectangle(32*lx, height*ly, 32, height));
                     graphics.Clear(Color.Transparent);
-                    graphics.DrawImage(copyBitmap, 32 * lx, height * ly);
+                    Util.drawImage(graphics, copyBitmap, 32 * lx, height * ly);
                     graphics.Dispose();
                     drawBorder();
                 }
@@ -458,18 +458,18 @@ namespace ps
             lbitmap1 = cloneBitmap(bitmap1);
             Bitmap nBitmap = new Bitmap(bitmap1.Width, bitmap1.Height + 4 * height, bitmap1.PixelFormat);
             Graphics graphics = Graphics.FromImage(nBitmap);
-            graphics.DrawImage(bitmap1, 0, 0);
+            Util.drawImage(graphics, bitmap1);
 
             if (bitmap1.Width == 128)
             {
-                graphics.DrawImage(nBitmap2, 0, bitmap1.Height);
+                Util.drawImage(graphics, nBitmap2, 0, bitmap1.Height);
             }
             else
             {
                 for (int i = 0; i < 4; i++)
                 {
                     Bitmap first = nBitmap2.Clone(new Rectangle(0, i * height, 32, height), nBitmap2.PixelFormat);
-                    graphics.DrawImage(first, 0, bitmap1.Height + i*height);
+                    Util.drawImage(graphics, first, 0, bitmap1.Height + i * height);
 
                     BitmapWrapper firstWrapper = new BitmapWrapper(first);
 
@@ -498,7 +498,7 @@ namespace ps
                     }
                     else
                     {
-                        graphics.DrawImage(second, 32, bitmap1.Height + i * height);
+                        Util.drawImage(graphics, second, 32, bitmap1.Height + i * height);
                     }
 
                     first.Dispose();
