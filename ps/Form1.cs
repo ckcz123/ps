@@ -76,7 +76,7 @@ namespace ps
                             Color color = bitmapWrapper.GetPixel(i, j);
                             if (color.A==0) trans++;
                             if (color.A==255 && color.R==255 && color.G==255 && color.B==255) white++;
-                            if (color.A == 255 && color.R == 0 && color.G == 0 && color.B == 0) black++;
+                            // if (color.A == 255 && color.R == 0 && color.G == 0 && color.B == 0) black++;
                         }
                     }
 
@@ -96,6 +96,7 @@ namespace ps
                             }
                         }
                     }
+                    /*
                     if (black > white && black > trans * 10)
                     {
                         if (MessageBox.Show("看起来这张图片是以纯黑为底色，是否自动调整为透明底色？", "提示", MessageBoxButtons.OKCancel,
@@ -112,6 +113,7 @@ namespace ps
                             }
                         }
                     }
+                     * */
                     bitmapWrapper.UnWrapper();
 
                     if (_bitmap.Width % 32 != 0 || _bitmap.Height % height != 0)
