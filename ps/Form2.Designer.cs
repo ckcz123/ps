@@ -39,7 +39,7 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "32x32",
-            "48x32"});
+            "32x48"});
             this.comboBox1.Location = new System.Drawing.Point(12, 21);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(67, 20);
@@ -59,7 +59,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(77, 90);
+            this.ClientSize = new System.Drawing.Size(73, 86);
             this.ControlBox = false;
             this.Controls.Add(this.button1);
             this.Controls.Add(this.comboBox1);

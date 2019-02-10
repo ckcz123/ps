@@ -434,7 +434,7 @@ namespace ps
         private void Form1_Load(object sender, EventArgs e)
         {
             pictureBox3.Height = height;
-            label6.Text = "本工具只支持" + height + "x32像素的操作，敬请谅解。";
+            label6.Text = "本工具只支持32x" + height + "像素的操作，敬请谅解。";
         }
 
         private void button5_Click(object sender, EventArgs e)
