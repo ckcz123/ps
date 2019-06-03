@@ -517,5 +517,33 @@ namespace ps
             MessageBox.Show("批量导入成功！", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            bitmap1 = new Bitmap(32, height);
+            lbitmap1 = null;
+            picture1 = cloneBitmap(bitmap1);
+            graphics1 = Graphics.FromImage(picture1);
+            lx = ly = -1;
+            pictureBox1.Image = picture1;
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (picture1 == null)
+            {
+                MessageBox.Show("没有图片！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            lbitmap1 = cloneBitmap(bitmap1);
+            Bitmap nBitmap = new Bitmap(bitmap1.Width + 32, bitmap1.Height, bitmap1.PixelFormat);
+            Graphics graphics = Graphics.FromImage(nBitmap);
+            Util.drawImage(graphics, bitmap1);
+            graphics.Dispose();
+            bitmap1 = cloneBitmap(nBitmap);
+            nBitmap.Dispose();
+            drawBorder();
+            panel1.AutoScrollPosition = new Point(bitmap1.Width, 0);
+        }
     }
 }
