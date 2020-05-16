@@ -35,7 +35,7 @@ namespace ps
         private string getDirectory()
         {
             string curr = Directory.GetCurrentDirectory();
-            foreach (var s in new [] {"project\\images\\", "..\\project\\images\\", "images\\"})
+            foreach (var s in new [] {"project\\materials\\", "..\\project\\materials\\", "materials\\" })
             {
                 string temp = Path.GetFullPath(Path.Combine(curr, s));
                 if (Directory.Exists(temp)) return temp;
@@ -279,6 +279,24 @@ namespace ps
             }
             lbitmap1 = cloneBitmap(bitmap1);
             Bitmap nBitmap = new Bitmap(bitmap1.Width, bitmap1.Height + height, bitmap1.PixelFormat);
+            Graphics graphics = Graphics.FromImage(nBitmap);
+            Util.drawImage(graphics, bitmap1);
+            graphics.Dispose();
+            bitmap1 = cloneBitmap(nBitmap);
+            nBitmap.Dispose();
+            drawBorder();
+            panel1.AutoScrollPosition = new Point(0, bitmap1.Height);
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (picture1 == null)
+            {
+                MessageBox.Show("没有图片！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            lbitmap1 = cloneBitmap(bitmap1);
+            Bitmap nBitmap = new Bitmap(bitmap1.Width, bitmap1.Height - height, bitmap1.PixelFormat);
             Graphics graphics = Graphics.FromImage(nBitmap);
             Util.drawImage(graphics, bitmap1);
             graphics.Dispose();
