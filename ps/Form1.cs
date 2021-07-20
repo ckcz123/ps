@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -304,6 +305,11 @@ namespace ps
             nBitmap.Dispose();
             drawBorder();
             panel1.AutoScrollPosition = new Point(0, bitmap1.Height);
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.uupoop.com/");
         }
 
         private bool saveImage(ref string directory, ref string filename, Bitmap bitmap)
