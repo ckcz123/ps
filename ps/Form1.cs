@@ -116,50 +116,41 @@ namespace ps
                     }
                      * */
                     bitmapWrapper.UnWrapper();
+                    Graphics graphics;
 
                     if (_bitmap.Width % 32 != 0 || _bitmap.Height % height != 0)
                     {
-                        if (_bitmap.Width <= 128 && _bitmap.Height <= 4 * height)
-                        {
-                            if (MessageBox.Show("目标长宽不符合条件，是否自动进行调整？", "加载错误", MessageBoxButtons.OKCancel,
+                        if (_bitmap.Width <= 128 && _bitmap.Height <= 4 * height && MessageBox.Show("目标长宽不符合条件，是否自动进行调整？", "加载错误", MessageBoxButtons.OKCancel,
                                     MessageBoxIcon.Asterisk) == DialogResult.OK)
-                            {
-                                bitmap = new Bitmap(128, 4 * height);
-                                Graphics graphics = Graphics.FromImage(bitmap);
-
-                                int w = _bitmap.Width / 4, h = _bitmap.Height / 4;
-                                for (int i = 0; i < 4; i++)
-                                {
-                                    for (int j = 0; j < 4; j++)
-                                    {
-                                        graphics.DrawImage(_bitmap, new Rectangle(i*32 + (32-w)/2, j*height + (height-h)/2, w, h), i*w, j*h, w, h, GraphicsUnit.Pixel);
-                                    }
-                                } 
-                                graphics.Dispose();
-                                _bitmap.Dispose();
-                            }
-                            else
-                            {
-                                _bitmap.Dispose();
-                                return false;
-                            }
-                        }
-                        else
                         {
-                            MessageBox.Show("目标图片宽不是32的倍数，或高不是" + height + "的倍数！", "加载失败", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
+                            bitmap = new Bitmap(128, 4 * height);
+                            graphics = Graphics.FromImage(bitmap);
+
+                            int w = _bitmap.Width / 4, h = _bitmap.Height / 4;
+                            for (int i = 0; i < 4; i++)
+                            {
+                                for (int j = 0; j < 4; j++)
+                                {
+                                    graphics.DrawImage(_bitmap, new Rectangle(i*32 + (32-w)/2, j*height + (height-h)/2, w, h), i*w, j*h, w, h, GraphicsUnit.Pixel);
+                                }
+                            }
+                            graphics.Dispose();
+                            _bitmap.Dispose();
+                            directory = Path.GetDirectoryName(dialog.FileName);
+                            filename = Path.GetFileName(dialog.FileName);
+                            return true;
+                        }
+                        if (MessageBox.Show("目标图片宽不是32的倍数，或高不是" + height + "的倍数！\n你想要继续吗？", "警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.Cancel)
+                        {
                             _bitmap.Dispose();
                             return false;
                         }
                     }
-                    else
-                    {
-                        bitmap = new Bitmap(_bitmap.Width, _bitmap.Height);
-                        Graphics graphics = Graphics.FromImage(bitmap);
-                        Util.drawImage(graphics, _bitmap);
-                        graphics.Dispose();
-                        _bitmap.Dispose();
-                    }
+                    bitmap = new Bitmap(_bitmap.Width, _bitmap.Height);
+                    graphics = Graphics.FromImage(bitmap);
+                    Util.drawImage(graphics, _bitmap);
+                    graphics.Dispose();
+                    _bitmap.Dispose();
                     directory = Path.GetDirectoryName(dialog.FileName);
                     filename = Path.GetFileName(dialog.FileName);
                     return true;
@@ -310,6 +301,24 @@ namespace ps
         private void button9_Click(object sender, EventArgs e)
         {
             Process.Start("https://www.uupoop.com/");
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            if (picture1 == null)
+            {
+                MessageBox.Show("没有图片！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            lbitmap1 = cloneBitmap(bitmap1);
+            Bitmap nBitmap = new Bitmap(bitmap1.Width - 32, bitmap1.Height, bitmap1.PixelFormat);
+            Graphics graphics = Graphics.FromImage(nBitmap);
+            Util.drawImage(graphics, bitmap1);
+            graphics.Dispose();
+            bitmap1 = cloneBitmap(nBitmap);
+            nBitmap.Dispose();
+            drawBorder();
+            panel1.AutoScrollPosition = new Point(bitmap1.Width, 0);
         }
 
         private bool saveImage(ref string directory, ref string filename, Bitmap bitmap)
