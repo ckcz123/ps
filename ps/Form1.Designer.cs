@@ -53,6 +53,12 @@
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -167,29 +173,29 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(330, 466);
+            this.label3.Location = new System.Drawing.Point(327, 413);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(275, 12);
+            this.label3.Size = new System.Drawing.Size(53, 12);
             this.label3.TabIndex = 11;
-            this.label3.Text = "在一边选中某个位置图标后按C键将复制到剪切板。";
+            this.label3.Text = "快捷键：";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(330, 490);
+            this.label4.Location = new System.Drawing.Point(327, 438);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(251, 12);
+            this.label4.Size = new System.Drawing.Size(89, 12);
             this.label4.TabIndex = 12;
-            this.label4.Text = "另一边选中需要的位置按V键即可粘贴并覆盖。";
+            this.label4.Text = "C/V：复制/粘贴";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(330, 514);
+            this.label5.Location = new System.Drawing.Point(469, 438);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(275, 12);
+            this.label5.Size = new System.Drawing.Size(143, 12);
             this.label5.TabIndex = 13;
-            this.label5.Text = "Z键可回退到上一步粘贴操作前（只能回退一步）。";
+            this.label5.Text = "Z：撤销（只能撤销一步）";
             // 
             // trackBar1
             // 
@@ -216,7 +222,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(330, 537);
+            this.label6.Location = new System.Drawing.Point(327, 538);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(239, 12);
             this.label6.TabIndex = 14;
@@ -293,7 +299,7 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(332, 563);
+            this.button9.Location = new System.Drawing.Point(329, 567);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(192, 23);
             this.button9.TabIndex = 24;
@@ -311,11 +317,71 @@
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(327, 464);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(113, 12);
+            this.label2.TabIndex = 26;
+            this.label2.Text = "上下左右：移动光标";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(469, 464);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(119, 12);
+            this.label9.TabIndex = 27;
+            this.label9.Text = "Tab：在左右进行切换";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(327, 489);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(107, 12);
+            this.label10.TabIndex = 28;
+            this.label10.Text = "O：在结尾新增一行";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(469, 489);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(107, 12);
+            this.label11.TabIndex = 29;
+            this.label11.Text = "P：在最右新增一列";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(327, 513);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(83, 12);
+            this.label12.TabIndex = 30;
+            this.label12.Text = "Del：删除本行";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(469, 513);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(71, 12);
+            this.label13.TabIndex = 31;
+            this.label13.Text = "S：保存图片";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(974, 627);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button8);
@@ -386,6 +452,12 @@
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
     }
 }
 

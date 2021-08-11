@@ -26,7 +26,7 @@ namespace ps
         private void button1_Click(object sender, EventArgs e)
         {
             Hide();
-            int[] selections = {32, 48};
+            int[] selections = {32, 48, 16};
             new Form1(selections[comboBox1.SelectedIndex]).Show();
         }
     }

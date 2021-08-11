@@ -30,13 +30,14 @@ namespace ps
         private Bitmap picture1, picture2;
         private Graphics graphics1, graphics2;
         string directory1, filename1, directory2, filename2;
-        private int lx=-1, ly=-1, rx=-1, ry=-1;
+        private int lx = -1, ly = -1, rx = -1, ry = -1;
+        private int llx = -1, lly = -1, rrx = -1, rry = -1;
         private Bitmap[] cacheBitmap = new Bitmap[25];
 
         private string getDirectory()
         {
             string curr = Directory.GetCurrentDirectory();
-            foreach (var s in new [] {"project\\materials\\", "..\\project\\materials\\", "materials\\" })
+            foreach (var s in new[] { "project\\materials\\", "..\\project\\materials\\", "materials\\" })
             {
                 string temp = Path.GetFullPath(Path.Combine(curr, s));
                 if (Directory.Exists(temp)) return temp;
@@ -75,8 +76,8 @@ namespace ps
                         for (int j = 0; j < _bitmap.Height; j++)
                         {
                             Color color = bitmapWrapper.GetPixel(i, j);
-                            if (color.A==0) trans++;
-                            if (color.A==255 && color.R==255 && color.G==255 && color.B==255) white++;
+                            if (color.A == 0) trans++;
+                            if (color.A == 255 && color.R == 255 && color.G == 255 && color.B == 255) white++;
                             // if (color.A == 255 && color.R == 0 && color.G == 0 && color.B == 0) black++;
                         }
                     }
@@ -131,7 +132,7 @@ namespace ps
                             {
                                 for (int j = 0; j < 4; j++)
                                 {
-                                    graphics.DrawImage(_bitmap, new Rectangle(i*32 + (32-w)/2, j*height + (height-h)/2, w, h), i*w, j*h, w, h, GraphicsUnit.Pixel);
+                                    graphics.DrawImage(_bitmap, new Rectangle(i * 32 + (32 - w) / 2, j * height + (height - h) / 2, w, h), i * w, j * h, w, h, GraphicsUnit.Pixel);
                                 }
                             }
                             graphics.Dispose();
@@ -174,7 +175,7 @@ namespace ps
             int value = (int)numericUpDown1.Value;
             if (value < 0) value = 0;
             if (value > 255) value = 255;
-            float opacity = value/255f;
+            float opacity = value / 255f;
             Graphics graphics = Graphics.FromImage(v);
             ColorMatrix matrix = new ColorMatrix();
             matrix.Matrix33 = opacity;
@@ -193,6 +194,7 @@ namespace ps
                 picture1 = cloneBitmap(bitmap1);
                 graphics1 = Graphics.FromImage(picture1);
                 lx = ly = -1;
+                llx = lly = -1;
                 pictureBox1.Image = picture1;
             }
         }
@@ -217,6 +219,7 @@ namespace ps
                 picture2 = cloneBitmap(bitmap2);
                 graphics2 = Graphics.FromImage(picture2);
                 rx = ry = -1;
+                rrx = rry = -1;
                 pictureBox2.Image = picture2;
                 trackBar1.Value = 0;
                 trackBar1.Enabled = true;
@@ -246,7 +249,7 @@ namespace ps
             pen.Dispose();
         }
 
-        private void resetImage(int n=0)
+        private void resetImage(int n = 0)
         {
             if (bitmap1 != null)
             {
@@ -328,7 +331,7 @@ namespace ps
                 MessageBox.Show("没有图片！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            SaveFileDialog dialog=new SaveFileDialog();
+            SaveFileDialog dialog = new SaveFileDialog();
             dialog.InitialDirectory = directory;
             dialog.FileName = filename;
             dialog.Filter = "PNG图片(*.png)|*.png";
@@ -348,7 +351,7 @@ namespace ps
                 {
                     MessageBox.Show("保存失败！", "保存失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-               
+
             }
             return false;
         }
@@ -364,19 +367,33 @@ namespace ps
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             if (bitmap1 == null) return;
+            if (rx >= 0 && ry >= 0)
+            {
+                rrx = rx; rry = ry;
+            }
             rx = ry = -1;
-            lx = ((MouseEventArgs)e).X/32;
-            ly = ((MouseEventArgs)e).Y/height;
+            lx = ((MouseEventArgs)e).X / 32;
+            ly = ((MouseEventArgs)e).Y / height;
             drawBorder();
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
             if (bitmap2 == null) return;
+            if (lx >= 0 && ly >= 0)
+            {
+                llx = lx; lly = ly;
+            }
             lx = ly = -1;
             rx = ((MouseEventArgs)e).X / 32;
             ry = ((MouseEventArgs)e).Y / height;
             drawBorder();
+        }
+
+        protected override bool ProcessDialogKey(Keys keyData) {
+            if (keyData == Keys.Up || keyData == Keys.Down || keyData == Keys.Left || keyData == Keys.Right || keyData == Keys.Tab || keyData == Keys.Delete)
+                return false;
+            return base.ProcessDialogKey(keyData);
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -394,6 +411,7 @@ namespace ps
                     copyBitmap = nBitmap2.Clone(new Rectangle(32 * rx, height * ry, 32, height), nBitmap2.PixelFormat);
                     pictureBox3.Image = copyBitmap;
                 }
+                e.Handled = true;
             }
             if (e.KeyCode == Keys.V && copyBitmap!=null)
             {
@@ -408,6 +426,7 @@ namespace ps
                     graphics.Dispose();
                     drawBorder();
                 }
+                e.Handled = true;
             }
             if (e.KeyCode == Keys.Z)
             {
@@ -417,6 +436,73 @@ namespace ps
                     lbitmap1 = null;
                 }
                 drawBorder();
+                e.Handled = true;
+            }
+            if (e.KeyCode == Keys.S)
+            {
+                button3_Click(null, null);
+            }
+            if (e.KeyCode == Keys.O && lx >= 0 && ly >= 0)
+            {
+                button2_Click(null, null);
+                e.Handled = true;
+            }
+            if (e.KeyCode == Keys.P && lx >= 0 && ly >= 0)
+            {
+                button7_Click(null, null);
+                e.Handled = true;
+            }
+            if (e.KeyCode == Keys.Delete && lx >= 0 && ly >= 0)
+            {
+                button8_Click(null, null);
+                e.Handled = true;
+            }
+            if (e.KeyCode == Keys.Up)
+            {
+                if (ly > 0) ly--;
+                if (ry > 0) ry--;
+                drawBorder();
+                e.Handled = true;
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+                if (ly >= 0 && ly < bitmap1.Height / height - 1) ly++;
+                if (ry >= 0 && ry < bitmap2.Height / height - 1) ry++;
+                drawBorder();
+                e.Handled = true;
+            }
+            if (e.KeyCode == Keys.Left)
+            {
+                if (lx > 0) lx--;
+                if (rx > 0) rx--;
+                drawBorder();
+                e.Handled = true;
+            }
+            if (e.KeyCode == Keys.Right)
+            {
+                if (lx >= 0 && lx < bitmap1.Width / 32 - 1) lx++;
+                if (rx >= 0 && rx < bitmap2.Width / 32 - 1) rx++;
+                drawBorder();
+                e.Handled = true;
+            }
+            if (e.KeyCode == Keys.Tab)
+            {
+                if (lx >= 0 && ly >= 0 && rrx >= 0 && rry >= 0)
+                {
+                    llx = lx; lly = ly;
+                    lx = ly = -1;
+                    rx = rrx; ry = rry;
+                    rrx = rry = -1;
+                }
+                else if (rx >= 0 && ry >= 0 && llx >= 0 && lly >= 0)
+                {
+                    rrx = rx; rry = ry;
+                    rx = ry = -1;
+                    lx = llx; ly = lly;
+                    llx = lly = -1;
+                }
+                drawBorder();
+                e.Handled = true;
             }
         }
 
